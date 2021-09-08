@@ -1,0 +1,16 @@
+{
+    "name": "Homo Deus Web",
+    "version": "0.0.0-development",
+    "private": true,
+    "scripts": {
+      "docker": "npm run docker-rm && npm run docker-build && npm run docker-run",
+      "docker-kill": "./docker/npm.sh docker-kill",
+      "docker-rm": "npm run docker-kill && ./docker/npm.sh docker-rm",
+      "docker-clean": "./docker/npm.sh docker-clean",
+      "docker-build": "./docker/npm.sh docker-build",
+      "docker-test": "UPMESSAGE='Booted API Server on port' && npm run docker-rm && npm run docker-build && DETACHED='-d' npm run docker-run && ./docker/npm.sh docker-test \"$UPMESSAGE\" && npm run docker-rm || (npm run docker-rm && exit 1)",
+      "docker-push": "npm run docker-rm && npm run docker-build && ./docker/npm.sh docker-push",
+      "docker-run": "DETACHED=${DETACHED:='no'} ./docker/npm.sh docker-run "
+    }
+  }
+  
