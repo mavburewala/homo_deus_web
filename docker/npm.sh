@@ -109,20 +109,20 @@ function docker-safety-check()
 function docker-build()
 {
 	display-step "${FUNCNAME[0]}"
-	echo -e "Building ${BL}readout/$REPO:$BRANCH${NC}"
+	echo -e "Building ${BL}pursuetoday/$REPO:$BRANCH${NC}"
 
 	# Find dockerfile in either repo/Dockerfile or repo/docker/Dockerfile
 	if [[ -f 'docker/Dockerfile' ]]; then
-		DOCKER_BUILDKIT=1 docker build  -f docker/Dockerfile -t "readout/$REPO:$BRANCH" .
+		DOCKER_BUILDKIT=1 docker build  -f docker/Dockerfile -t "pursuetoday/$REPO:$BRANCH" .
 	else
-		dDOCKER_BUILDKIT=1 ocker build -t "readout/$REPO:$BRANCH" .
+		dDOCKER_BUILDKIT=1 ocker build -t "pursuetoday/$REPO:$BRANCH" .
 	fi
 
 	# Success?
 	if [[ $? -eq 0 ]]; then
-		echo -e "${GN}SUCCESS: ${NC}Built image ${BL}readout/$REPO:$BRANCH${NC}."
+		echo -e "${GN}SUCCESS: ${NC}Built image ${BL}pursuetoday/$REPO:$BRANCH${NC}."
 	else
-		echo -e "${RD}ERROR: ${NC}Couldn't build ${BL}readout/$REPO:$BRANCH${NC}. Stopping."; exit 1
+		echo -e "${RD}ERROR: ${NC}Couldn't build ${BL}pursuetoday/$REPO:$BRANCH${NC}. Stopping."; exit 1
 	fi
 }
 
@@ -164,28 +164,28 @@ function docker-push()
 	fi
 
 	# Message
-	echo -e "Pushing ${BL}readout/$REPO:$BRANCH ${NC}"
+	echo -e "Pushing ${BL}pursuetoday/$REPO:$BRANCH ${NC}"
 
 	# Tag image with branch name and also commit
 	if [[ $PUSHCOMMIT == true ]]; then
-		docker tag "readout/$REPO:$BRANCH" "readout/$REPO:$BRANCH-$COMMIT"
-		docker push "readout/$REPO:$BRANCH-$COMMIT"
+		docker tag "pursuetoday/$REPO:$BRANCH" "pursuetoday/$REPO:$BRANCH-$COMMIT"
+		docker push "pursuetoday/$REPO:$BRANCH-$COMMIT"
 
 		if [[ $? -eq 0 ]]; then
-			echo -e "${GN}SUCCESS: ${NC}Pushed ${BL}readout/$REPO:$BRANCH-$COMMIT ${NC}"
+			echo -e "${GN}SUCCESS: ${NC}Pushed ${BL}pursuetoday/$REPO:$BRANCH-$COMMIT ${NC}"
 		else
-			echo -e "${RD}ERROR: ${NC}Couldn't push ${BL}readout/$REPO:$BRANCH-$COMMIT${NC}"
+			echo -e "${RD}ERROR: ${NC}Couldn't push ${BL}pursuetoday/$REPO:$BRANCH-$COMMIT${NC}"
 		fi
 	fi
 
 	# Push
-	docker push "readout/$REPO:$BRANCH"
+	docker push "pursuetoday/$REPO:$BRANCH"
 
 	# Success
 	if [[ $? -eq 0 ]]; then
-		echo -e "${GN}SUCCESS: ${NC}Pushed ${BL}readout/$REPO:$BRANCH ${NC}"
+		echo -e "${GN}SUCCESS: ${NC}Pushed ${BL}pursuetoday/$REPO:$BRANCH ${NC}"
 	else
-		echo -e "${RD}ERROR: ${NC}Couldn't push ${BL}readout/$REPO:$BRANCH${NC}"
+		echo -e "${RD}ERROR: ${NC}Couldn't push ${BL}pursuetoday/$REPO:$BRANCH${NC}"
 	fi
 }
 
@@ -255,7 +255,7 @@ function docker-run()
 			if [[ $ANSWER == "yes" || $ANSWER == "y" ]]; then
 				echo -e "${BR}Stopping other container and starting a new one${NC}"
 				docker stop $(docker ps | grep "$PORTS" | awk '{print $1}')
-				docker run $DETACHED -it $PORTS --name npm_$REPO$2 readout/$REPO:$BRANCH || (echo -e "${RD}ERROR: ${NC}Couldn't start a container using ${BL}readout/$REPO:$BRANCH${NC} (or you exited the container with ctrl + c)"; exit 1)
+				docker run $DETACHED -it $PORTS --name npm_$REPO$2 pursuetoday/$REPO:$BRANCH || (echo -e "${RD}ERROR: ${NC}Couldn't start a container using ${BL}pursuetoday/$REPO:$BRANCH${NC} (or you exited the container with ctrl + c)"; exit 1)
 				exit 0
 			elif [[ $ANSWER == "no" || $ANSWER == "n" ]]; then
 				exit 1
@@ -268,10 +268,10 @@ function docker-run()
 			read ANSWER
 		done
 	else
-		echo "readout/$REPO:$BRANCH, $REPO$2"
-		echo "docker run $DETACHED -it $PORTS --name npm_$REPO$2 readout/$REPO:$BRANCH || (echo -e '${RD}ERROR: ${NC}Couldn't start a container using ${BL}readout/$REPO:$BRANCH${NC} (or you exited the container with ctrl + c)'; exit 1)"
+		echo "pursuetoday/$REPO:$BRANCH, $REPO$2"
+		echo "docker run $DETACHED -it $PORTS --name npm_$REPO$2 pursuetoday/$REPO:$BRANCH || (echo -e '${RD}ERROR: ${NC}Couldn't start a container using ${BL}pursuetoday/$REPO:$BRANCH${NC} (or you exited the container with ctrl + c)'; exit 1)"
 		# Start continaer
-		docker run -it $PORTS --name npm_$REPO$2 readout/$REPO:$BRANCH || (echo -e "${RD}ERROR: ${NC}Couldn't start a container using ${BL}readout/$REPO:$BRANCH${NC} (or you exited the container with ctrl + c)"; exit 1)
+		docker run -it $PORTS --name npm_$REPO$2 pursuetoday/$REPO:$BRANCH || (echo -e "${RD}ERROR: ${NC}Couldn't start a container using ${BL}pursuetoday/$REPO:$BRANCH${NC} (or you exited the container with ctrl + c)"; exit 1)
 	fi
 }
 
@@ -426,8 +426,8 @@ function docker-clean()
 	echo -e "${GN}SUCCESS: ${NC}Cleaned any ${CY}npm_$REPO$1${NC} containers."
 
 	# Remove images
-	docker rmi $(docker images | grep "readout/$REPO" | tail -n +2 | awk '{print $3}')
-	echo -e "${GN}SUCCESS: ${NC}Cleaned any ${CY}readout/$REPO${NC} images."
+	docker rmi $(docker images | grep "pursuetoday/$REPO" | tail -n +2 | awk '{print $3}')
+	echo -e "${GN}SUCCESS: ${NC}Cleaned any ${CY}pursuetoday/$REPO${NC} images."
 }
 
 #####
@@ -452,8 +452,8 @@ function docker-deploy()
 	# Update service
 	if [[ $SERVICE == true ]]; then
 		ssh $SERVER_NAME -p 1022 << EOF
-			docker image pull "readout/$REPO:$BRANCH"
-			docker service update --force --image "readout/$REPO:$BRANCH" "${1}_$REPO$2" > /dev/null 2>/dev/null \
+			docker image pull "pursuetoday/$REPO:$BRANCH"
+			docker service update --force --image "pursuetoday/$REPO:$BRANCH" "${1}_$REPO$2" > /dev/null 2>/dev/null \
 			&& msg-admin "Successfully updated *${1}_$REPO$2* service." \
 			|| (msg-admin "Failed to update *${1}_$REPO$2*! Check logs."; exit 1)
 EOF
@@ -470,7 +470,7 @@ EOF
 		else
 			# If already running, then stop & remove
 			ssh $SERVER_NAME -p 1022 << EOF
-				docker image pull "readout/$REPO:$BRANCH"
+				docker image pull "pursuetoday/$REPO:$BRANCH"
 				(docker stop $REPO$2 && docker rm $REPO$2)  \
 				|| (msg-admin 'Error trying to stop/remove container *$REPO$2*.'; exit 1)
 
@@ -539,11 +539,11 @@ function docker-rollback()
 	echo -e "This will take longer if there are many containers running for this app"
 
 	# Get current and previous image hashes
-	IMAGE_CURR=$(ssh $SERVER_NAME -p 1022 docker images | grep "readout/$REPO" | head -n 1 | awk '{print $3}')
-	IMAGE_PREV=$(ssh $SERVER_NAME -p 1022 docker images | grep" readout/$REPO" | head -n 2 | tail -n 1 | awk '{print $3}')
+	IMAGE_CURR=$(ssh $SERVER_NAME -p 1022 docker images | grep "pursuetoday/$REPO" | head -n 1 | awk '{print $3}')
+	IMAGE_PREV=$(ssh $SERVER_NAME -p 1022 docker images | grep" pursuetoday/$REPO" | head -n 2 | tail -n 1 | awk '{print $3}')
 
 	# Update service to use older image, then remove the once-was currently running image
-	ssh $SERVER_NAME -p 1022 "docker service update --image readout/$REPO:$IMAGE_PREV ${1}_$REPO$2 || msg-admin 'Error rolling back *${1}_$REPO$2*!'" \
+	ssh $SERVER_NAME -p 1022 "docker service update --image pursuetoday/$REPO:$IMAGE_PREV ${1}_$REPO$2 || msg-admin 'Error rolling back *${1}_$REPO$2*!'" \
 	&& (ssh $SERVER_NAME -p 1022 "docker rmi $IMAGE_CURR || msg-admin \"Error removing old image *$IMG_CURR*.\"" \
 		&& echo -e "${GN}SUCCESS: ${NC}Rolled back service ${CY}${1}_$REPO$2${NC} to previous image ${BOLD}$IMAGE_CURR${NC}. Use npm run logs${2/_/-}-$1 to watch logs." || echo -e "${RD}ERROR: ${NC}An issue occurred while trying to remove previous image ${CY}$IMAGE_CURR${NC}.") \
 	|| echo -e "${RD}ERROR: ${NC}An issue occurred while trying to roll back ${BL}${SERVER}_$REPO$2${NC} service on the ${PK}$1 ${NC}server."
@@ -569,7 +569,7 @@ function docker-status()
 	echo '*Note - some containers running outside the swarm (like router) may have PORTS column empty.'
 
 	# SSH and get running containers
-	ssh $SERVER_NAME -p 1022 "docker ps | head -n 1; docker ps | grep readout/$REPO"
+	ssh $SERVER_NAME -p 1022 "docker ps | head -n 1; docker ps | grep pursuetoday/$REPO"
 	echo '======================'
 	CONTAINERS=$(ssh $SERVER_NAME -p 1022 'docker stats --no-stream $(docker ps --format={{.Names}})')
 	if [[ $CONTAINERS == "" ]]; then
